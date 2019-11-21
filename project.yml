@@ -1,0 +1,45 @@
+name: EditionsSample
+options:
+  xcodeVersion: "1021"
+  minimumXcodeGenVersion: "2.10.0"
+  deploymentTarget:
+    iOS: "12.0"
+settingGroups:
+  default:
+    SWIFT_VERSION: 5.0
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: true
+
+targets:
+  EditionsSampleApp:
+    platform: iOS
+    type: application
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: "EditionsSampleApp"
+        CFBundleName: "EditionsSampleApp"
+        CFBundleVersion: '1.0.0'
+        CFBundleShortVersionString: '1.0.0'
+        CFBundleDevelopmentRegion: "fi"
+        UILaunchStoryboardName: LaunchScreen
+        ITSAppUsesNonExemptEncryption: false
+        UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        NSCalendarsUsageDescription: Localized in InfoPlist.strings.
+        NSLocationWhenInUseUsageDescription: Localized in InfoPlist.strings.
+        NSPhotoLibraryUsageDescription:	Localized in InfoPlist.strings.
+        UIBackgroundModes:
+          - audio
+        UIUserInterfaceStyle: "Light"
+    scheme: {}
+    sources:
+      - path: App/Sources
+        name: "App: Sources 🚀"
+      - path: App/Resources
+        name: "App: Resources"
+      - path: UI/Sources
+        name: "UI: Sources 📱"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "fi.richie.editions.app"
+      groups:
+        - default
