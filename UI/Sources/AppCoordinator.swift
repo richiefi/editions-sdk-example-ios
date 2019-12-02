@@ -13,7 +13,7 @@ public class AppCoordinator {
     
     public init(window: UIWindow) {
         self.window = window
-        let editions = Editions(appId: "fi.richie.editionsTestApp",
+        let editions = Editions(bundleId: "fi.richie.editionsTestApp",
                                 tokenProvider: TokenProviderImpl(),
                                 analyticsListener: AnalyticsListenerImpl())
         
