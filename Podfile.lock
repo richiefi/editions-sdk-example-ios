@@ -1,16 +1,16 @@
 PODS:
-  - RichieSDK (201912.3)
+  - RichieSDK (201912.17)
 
 DEPENDENCIES:
-  - RichieSDK (= 201912.3)
+  - RichieSDK (= 201912.17)
 
 SPEC REPOS:
   https://github.com/richiefi/richiesdk-ios.git:
     - RichieSDK
 
 SPEC CHECKSUMS:
-  RichieSDK: 21803206c18d066ed467fcef9a0f07a5614f4630
+  RichieSDK: 1edc284b0d93c3708a4d025ab98face6c01ff11c
 
-PODFILE CHECKSUM: af89ba59548b9bc83bd2b7ebc4379c37f67bdec3
+PODFILE CHECKSUM: bb23a8e6377765e6856914f440bc9ad85404eb29
 
 COCOAPODS: 1.8.4
