@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RichieSDK
+import RichieEditionsSDK
 
 class CollectionViewCell: UICollectionViewCell {
     @IBOutlet var coverImageView: UIImageView!

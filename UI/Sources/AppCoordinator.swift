@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RichieSDK
+import RichieEditionsSDK
 
 public class AppCoordinator {
     private let window: UIWindow

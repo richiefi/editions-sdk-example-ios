@@ -7,7 +7,7 @@
 
 import UIKit
 
-import RichieSDK
+import RichieEditionsSDK
 
 class EditionsViewController: UIViewController {
     private let editions: Editions
