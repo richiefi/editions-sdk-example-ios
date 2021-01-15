@@ -11,4 +11,4 @@ end
 
 
 source 'https://github.com/richiefi/richiesdk-ios.git'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
