@@ -6,7 +6,7 @@ project 'EditionsSample.xcodeproj'
 target 'EditionsSampleApp' do
   use_frameworks!
 
-  pod 'RichieEditionsSDK', '201912.17'
+  pod 'RichieEditionsSDK', '202101.35'
 end
 
 

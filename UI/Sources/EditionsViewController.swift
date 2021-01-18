@@ -116,6 +116,10 @@ private extension EditionsViewController {
                     self.showToast(message: "Error opening edition: Edition not found.")
                 case .internalError(let err):
                     self.showToast(message: "Error opening edition: \(err.localizedDescription).")
+                @unknown default:
+                    assertionFailure("Unknown error: \(error)")
+                    Log.error("Unknown error: \(error)")
+                    self.showToast(message: "Error opening edition: \(error).")
                 }
             }
         })

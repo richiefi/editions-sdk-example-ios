@@ -30,6 +30,8 @@ public class AppCoordinator {
 }
 
 class TokenProviderImpl : TokenProvider {
+    var hasToken: Bool { true }
+
     func token(reason: TokenRequestReason, trigger: TokenRequestTrigger, completion: @escaping TokenCompletion) {
         let jwtToken = "eyJhbGciOiJFUzM4NCIsImtpZCI6Im5JYVJ5d1RXNlg1WndPaXllWFNmeDhnYWVWV1d6Z2g4YkRVbUJSeVRseVUifQ.eyJpc3MiOiJodHRwczovL2FwcGRhdGEucmljaGllLmZpIiwiZW50IjpbImVkaXRpb25zX2RlbW9fY29udGVudCJdLCJleHAiOjE4OTA4ODkyMDAsImlhdCI6MTU3NTI3MDAwMH0.TWFZ6T8PqPwTB5Icv8BjxXiAVeZatoJxxSvTJcd31QXMnE-6m1_0XHELqv5Zr91Hg0XGyElo9HGhG7scTOlf17-40d35HnFn6cLoKrCJhGcrTNrUw1mJ7_W8X6XBeOZS"
         
@@ -49,6 +51,10 @@ class TokenProviderImpl : TokenProvider {
             // Here, the host app would notify the user that he/she does not have enough entitlements for accessing the selected content.
             // This case is used if token provided in .noToken case was valid, but didn't provide enough entitlements for content.
             Log.error("Current token is not entitled to the selected content.")
+            completion(nil)
+        @unknown default:
+            assertionFailure("Unknown token request reason: \(reason)")
+            Log.error("Unknown token request reason: \(reason)")
             completion(nil)
         }
     }
