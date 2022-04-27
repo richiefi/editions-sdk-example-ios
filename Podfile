@@ -1,4 +1,4 @@
-platform :ios, '9.3'
+platform :ios, '12.0'
 
 workspace 'EditionsSampleApp'
 project 'EditionsSample.xcodeproj'
@@ -6,7 +6,7 @@ project 'EditionsSample.xcodeproj'
 target 'EditionsSampleApp' do
   use_frameworks!
 
-  pod 'RichieEditionsSDK', '202101.35'
+  pod 'RichieEditionsSDK', '202201.16'
 end
 
 
