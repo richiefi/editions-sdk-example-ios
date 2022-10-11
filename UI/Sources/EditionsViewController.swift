@@ -240,7 +240,7 @@ extension EditionsViewController {
         
         let width = floor((availableWidth - CGFloat((numColumns + 1) * 10)) / CGFloat(numColumns))
         
-        return CGSize(width: width, height: width * 1.8)
+        return CGSize(width: round(width), height: round(width * 1.8))
     }
 }
 
