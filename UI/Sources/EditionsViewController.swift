@@ -74,7 +74,14 @@ private extension EditionsViewController {
             return
         }
         
-        let coverUrl = self.editions.editionCoverUrlProvider?.coverUrlForEdition(editionId: editionId, boundingBoxSize: self.coverBoundingBox())
+        cell.getCoverCancelable = self.editions.editionCoverProvider?.coverImageForEdition(editionId: editionId, boundingBoxSize: self.coverBoundingBox(), completion: { result in
+            switch (result) {
+            case .success(let cover):
+                cell.coverImageView.image = cover
+            case .failure(let error):
+                print("Problem getting cover: \(error.localizedDescription)")
+            }
+        })
         
         let processing = processing || (downloadProgress < 0 && self.activeDownloads[editionId] != nil)
         
@@ -87,14 +94,14 @@ private extension EditionsViewController {
                     let spaceOnDiskMB = totalBytes / 1024 / 1024
                     
                     DispatchQueue.main.async {
-                        cell.populate(title: displayInfo.title, state: "Downloaded \(spaceOnDiskMB)MB", downloadProgress: downloadProgress, processing: processing, coverUrl: coverUrl)
+                        cell.populate(title: displayInfo.title, state: "Downloaded \(spaceOnDiskMB)MB", downloadProgress: downloadProgress, processing: processing)
                     }
             })
         } else {
             stateString = "Not downloaded"
         }
         
-        cell.populate(title: displayInfo.title, state: stateString, downloadProgress: downloadProgress, processing: processing, coverUrl: coverUrl)
+        cell.populate(title: displayInfo.title, state: stateString, downloadProgress: downloadProgress, processing: processing)
     }
     
     func updateCellForEdition(_ editionId: UUID) {
