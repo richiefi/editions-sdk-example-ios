@@ -38,8 +38,15 @@ targets:
         name: "App: Resources"
       - path: UI/Sources
         name: "UI: Sources 📱"
+    dependencies:
+      - package: RichieEditionsSDK
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "fi.richie.editions.app"
       groups:
         - default
+        
+packages:
+  RichieEditionsSDK:
+    url: https://github.com/richiefi/richiesdk-ios
+    exactVersion: "202210.14"
