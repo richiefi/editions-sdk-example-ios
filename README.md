@@ -10,7 +10,9 @@ Use tap to download an edition, cancel an ongoing download or open a downloaded 
 
 ## Building
 
-The repository uses [XcodeGen] to create the project file, and the SDK is integrated using [Cocoa Pods]. Use the included script `generate-xcode-project.sh` to generate the project and install the dependencies, after that open the workspace `EditionsSampleApp.xcworkspace`.
+Open `EditionsSample.xcodeproj` and build.
+
+The repository uses [XcodeGen] to create the project file, and the SDK is integrated using [SPM] `Swift Package Manager`. Use the included script `generate-xcode-project.sh` to regenerate the project file after editing `project.yml` if you want to modify the project.
 
 [XcodeGen]: https://github.com/yonaskolb/XcodeGen
-[Cocoa Pods]: https://cocoapods.org
+[SPM]: https://www.swift.org/package-manager/

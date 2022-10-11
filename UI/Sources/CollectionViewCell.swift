@@ -16,8 +16,9 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet var downloadProgress: UIProgressView!
     
-    func populate(title: String, state: String, downloadProgress: Float, processing: Bool, coverUrl: URL?) {
-        self.coverImageView.loadRemoteImage(url: coverUrl)
+    var getCoverCancelable: Cancelable?
+    
+    func populate(title: String, state: String, downloadProgress: Float, processing: Bool) {
         self.titleLabel.text = title
         self.stateLabel.text = state
         
@@ -29,26 +30,16 @@ class CollectionViewCell: UICollectionViewCell {
             self.downloadProgress.progress = downloadProgress
         }
     }
-}
-
-
-extension UIImageView {
-public func loadRemoteImage(url: URL?) {
-    guard let url = url else {
-        return
-    }
     
-    URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) -> Void in
+    override func prepareForReuse() {
+        self.getCoverCancelable?.cancel()
+        self.getCoverCancelable = nil
 
-        if error != nil {
-            print(error as Any)
-            return
-        }
+        self.titleLabel.text = nil
+        self.stateLabel.text = nil
+        self.coverImageView.image = nil
         
-        DispatchQueue.main.async(execute: { () -> Void in
-            let image = UIImage(data: data!)
-            self.image = image
-        })
-
-    }).resume()
-}}
+        self.loadingIndicator.isHidden = true
+        self.downloadProgress.isHidden = true
+    }
+}
