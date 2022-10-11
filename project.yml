@@ -1,12 +1,12 @@
 name: EditionsSample
 options:
-  xcodeVersion: "1021"
-  minimumXcodeGenVersion: "2.10.0"
+  xcodeVersion: "1401"
+  minimumXcodeGenVersion: "2.32.0"
   deploymentTarget:
     iOS: "12.0"
 settingGroups:
   default:
-    SWIFT_VERSION: 5.0
+    SWIFT_VERSION: 5.5
     SWIFT_TREAT_WARNINGS_AS_ERRORS: true
 
 targets:
