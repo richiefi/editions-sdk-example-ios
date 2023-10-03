@@ -33,7 +33,7 @@ class TokenProviderImpl : TokenProvider {
     var hasToken: Bool { true }
 
     func token(reason: TokenRequestReason, trigger: TokenRequestTrigger, completion: @escaping TokenCompletion) {
-        let jwtToken = "eyJhbGciOiJFUzM4NCIsImtpZCI6Im5JYVJ5d1RXNlg1WndPaXllWFNmeDhnYWVWV1d6Z2g4YkRVbUJSeVRseVUifQ.eyJpc3MiOiJodHRwczovL2FwcGRhdGEucmljaGllLmZpIiwiZW50IjpbImVkaXRpb25zX2RlbW9fY29udGVudCJdLCJleHAiOjE4OTA4ODkyMDAsImlhdCI6MTU3NTI3MDAwMH0.TWFZ6T8PqPwTB5Icv8BjxXiAVeZatoJxxSvTJcd31QXMnE-6m1_0XHELqv5Zr91Hg0XGyElo9HGhG7scTOlf17-40d35HnFn6cLoKrCJhGcrTNrUw1mJ7_W8X6XBeOZS"
+        let jwtToken = "eyJhbGciOiJFUzM4NCIsInR5cCI6IkpXVCIsImtpZCI6InJpY2hpZS1ib29rcy1kZXYifQ.eyJlbnQiOlsiZGV2LWFsbC1hY2Nlc3MiXSwiZXhwIjoxNzE3NDExMjk5LCJpc3MiOiJyaWNoaWUtYm9va3MtZGV2Iiwic3ViIjoicmljaGllLWJvb2tzLWRldiIsImlhdCI6MTU1OTU1ODU2NH0.mC8jbluWgSMa6f0b4fGesZElNr74S36tMAQFPjSyGwINjBNnbf-NG9DXgO6qwyhKk1RgnkpfyiRxkzfrYjkHhgDCPMlcNsA_MvWWdCEehOn3DE5HsvxS2Ev21fotXDXb"
         
         switch reason {
             

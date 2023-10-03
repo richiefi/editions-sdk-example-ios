@@ -12,7 +12,7 @@ import RichieEditionsSDK
 class EditionsViewController: UIViewController {
     private let editions: Editions
     
-    private var editionsUUIDs: [UUID] = []
+    private var allEditions: [Edition] = []
     
     private var activeDownloads: [UUID : Cancelable] = [:]
         
@@ -40,12 +40,21 @@ class EditionsViewController: UIViewController {
         
         self.collectionView.addGestureRecognizer(longTapRecognizer)
         
-        self.editions.updateFeed { success in
-            self.editions.editionProvider?.allEditions(callback: { editionsUUIDs in
-                self.editionsUUIDs = editionsUUIDs
-                self.collectionView.reloadData()
-            })
-            
+        self.editions.updateFeed { _ in
+            let paginator = self.editions.editionProvider?.editions(productTags: nil, startDate: nil, endDate: nil, pageSize: nil)
+
+            paginator?.next { result in
+                switch result {
+                case let .success(page):
+                    self.allEditions = page.editions
+
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
+                case .failure:
+                    print("ooops")
+                }
+            }
         }
     }
     
@@ -57,60 +66,55 @@ class EditionsViewController: UIViewController {
 }
 
 private extension EditionsViewController {
-    func cellForEdition(_ editionId: UUID) -> CollectionViewCell? {
-        guard let index = self.editionsUUIDs.firstIndex(of: editionId) else {
+    func cellForEdition(_ edition: Edition) -> CollectionViewCell? {
+        guard let index = self.allEditions.firstIndex(of: edition) else {
             return nil
         }
         
         return self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as! CollectionViewCell?
     }
     
-    func populateCell(editionId: UUID, cell: CollectionViewCell?, downloadProgress: Float = -1, processing: Bool = false) {
+    func populateCell(edition: Edition, cell: CollectionViewCell?, downloadProgress: Float = -1, processing: Bool = false) {
         guard let cell = cell else {
             return
         }
         
-        guard let displayInfo = self.editions.editionDisplayInfoProvider?.displayInfoForEdition(editionId: editionId) else {
-            return
-        }
-        
-        cell.getCoverCancelable = self.editions.editionCoverProvider?.coverImageForEdition(editionId: editionId, boundingBoxSize: self.coverBoundingBox(), completion: { result in
-            switch (result) {
-            case .success(let cover):
+        cell.getCoverCancelable = self.editions.editionCoverProvider?.coverImageForEdition(edition: edition, boundingBoxSize: coverBoundingBox(), completion: { result in
+            switch result {
+            case let .success(cover):
                 cell.coverImageView.image = cover
-            case .failure(let error):
-                print("Problem getting cover: \(error.localizedDescription)")
+            case let .failure(error):
+                print("Ooops: \(error.localizedDescription)")
             }
         })
         
-        let processing = processing || (downloadProgress < 0 && self.activeDownloads[editionId] != nil)
+        let processing = processing || (downloadProgress < 0 && self.activeDownloads[edition.id] != nil)
         
         let stateString: String
-        if self.editions.downloadedEditionsProvider?.downloadedEditions.contains(editionId) ?? false {
+        if self.editions.downloadedEditionsProvider?.downloadedEditions.map({ $0.id }).contains(edition.id) ?? false {
             stateString = "Downloaded"
-            
-            self.editions.editionsDiskUsageProvider?.diskUsageByDownloadedEdition(editionId: editionId
-                , callback: { totalBytes in
-                    let spaceOnDiskMB = totalBytes / 1024 / 1024
-                    
-                    DispatchQueue.main.async {
-                        cell.populate(title: displayInfo.title, state: "Downloaded \(spaceOnDiskMB)MB", downloadProgress: downloadProgress, processing: processing)
-                    }
+
+            self.editions.editionsDiskUsageProvider?.diskUsageByDownloadedEdition(editionId: edition.id, callback: { totalBytes in
+                let spaceOnDiskMB = totalBytes / 1024 / 1024
+
+                DispatchQueue.main.async {
+                    cell.populate(title: edition.title, state: "Downloaded \(spaceOnDiskMB)MB", downloadProgress: downloadProgress, processing: processing)
+                }
             })
         } else {
             stateString = "Not downloaded"
         }
         
-        cell.populate(title: displayInfo.title, state: stateString, downloadProgress: downloadProgress, processing: processing)
+        cell.populate(title: edition.title, state: stateString, downloadProgress: downloadProgress, processing: processing)
     }
     
-    func updateCellForEdition(_ editionId: UUID) {
-        self.populateCell(editionId: editionId, cell: self.cellForEdition(editionId))
+    func updateCellForEdition(_ edition: Edition) {
+        self.populateCell(edition: edition, cell: self.cellForEdition(edition))
     }
     
-    func presentEdition(_ editionId: UUID) {
-        let cell = self.cellForEdition(editionId)
-        self.editions.editionPresenter?.openEdition(editionId: editionId,
+    func presentEdition(_ edition: Edition) {
+        let cell = self.cellForEdition(edition)
+        self.editions.editionPresenter?.openEdition(edition: edition,
                                                     presenterViewController: self,
                                                     sourceView: cell?.coverImageView,
                                                     sourceImage: cell?.coverImageView.image,
@@ -157,10 +161,10 @@ private extension EditionsViewController {
         let p = gesture.location(in: self.collectionView)
 
         if let indexPath = self.collectionView.indexPathForItem(at: p) {
-            let uuid = self.editionsUUIDs[indexPath.item]
+            let edition = self.allEditions[indexPath.item]
             
-            self.editions.downloadedEditionsManager?.deleteEdition(editionId: uuid, completion: {
-                self.updateCellForEdition(uuid)
+            self.editions.downloadedEditionsManager?.deleteEdition(editionId: edition.id, completion: {
+                self.updateCellForEdition(edition)
             })
         } else {
             print("couldn't find index path")
@@ -175,16 +179,16 @@ extension EditionsViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.editionsUUIDs.count
+        return self.allEditions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "EditionCell", for: indexPath) as! CollectionViewCell
-        
-        let uuid = self.editionsUUIDs[indexPath.item]
 
-        self.populateCell(editionId: uuid, cell: cell, downloadProgress: -1, processing: false)
-        
+        let edition = self.allEditions[indexPath.item]
+
+        self.populateCell(edition: edition, cell: cell, downloadProgress: -1, processing: false)
+
         return cell
     }
 }
@@ -192,18 +196,18 @@ extension EditionsViewController: UICollectionViewDataSource {
 extension EditionsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let uuid = self.editionsUUIDs[indexPath.item]
+        let edition = self.allEditions[indexPath.item]
         
-        if self.editions.downloadedEditionsProvider?.downloadedEditions.contains(uuid) ?? false {
-            self.presentEdition(uuid)
+        if self.editions.downloadedEditionsProvider?.downloadedEditions.map({ $0.id }).contains(edition.id) ?? false {
+            self.presentEdition(edition)
         } else {
-            if let existingDownload = self.activeDownloads[uuid] {
+            if let existingDownload = self.activeDownloads[edition.id] {
                 existingDownload.cancel()
-                self.activeDownloads.removeValue(forKey: uuid)
-                self.updateCellForEdition(uuid)
+                self.activeDownloads.removeValue(forKey: edition.id)
+                self.updateCellForEdition(edition)
             } else {
-                self.activeDownloads[uuid] = self.editions.editionPresenter?.downloadEdition(editionId: uuid, downloadProgressListener: self)
-                self.updateCellForEdition(uuid)
+                self.activeDownloads[edition.id] = self.editions.editionPresenter?.downloadEdition(edition: edition, downloadProgressListener: self)
+                self.updateCellForEdition(edition)
             }
         }
     }
@@ -245,28 +249,28 @@ extension EditionsViewController {
 }
 
 extension EditionsViewController: DownloadProgressListener {
-    func editionWillStartDownload(editionId: UUID) {
-        self.updateCellForEdition(editionId)
+    func editionWillStartDownload(edition: Edition) {
+        self.updateCellForEdition(edition)
     }
-    
-    func editionDownloadProgress(editionId: UUID, progress: Float, isBeingPreparedForPresentation: Bool) {
-        self.populateCell(editionId: editionId, cell: self.cellForEdition(editionId), downloadProgress: progress, processing: isBeingPreparedForPresentation)
+
+    func editionDownloadProgress(edition: Edition, progress: Float, isBeingPreparedForPresentation: Bool) {
+        self.populateCell(edition: edition, cell: self.cellForEdition(edition), downloadProgress: progress, processing: isBeingPreparedForPresentation)
     }
-    
-    func editionDidDownload(editionId: UUID) {
-        self.activeDownloads.removeValue(forKey: editionId)
-        self.updateCellForEdition(editionId)
-        
-        if (self.activeDownloads.values.count == 0) {
+
+    func editionDidDownload(edition: Edition) {
+        self.activeDownloads.removeValue(forKey: edition.id)
+        self.updateCellForEdition(edition)
+
+        if self.activeDownloads.values.isEmpty {
             DispatchQueue.main.async {
-                self.presentEdition(editionId)
+                self.presentEdition(edition)
             }
         }
     }
-    
-    func editionDidFailDownload(editionId: UUID, error: Error?) {
-        self.showToast(message: "Error downloading edition: \(error?.localizedDescription ?? "unknown error")")
-        self.activeDownloads.removeValue(forKey: editionId)
-        self.updateCellForEdition(editionId)
+
+    func editionDidFailDownload(edition: Edition, error: DownloadError) {
+        self.showToast(message: "Error downloading edition: \(error.localizedDescription)")
+        self.activeDownloads.removeValue(forKey: edition.id)
+        self.updateCellForEdition(edition)
     }
 }
