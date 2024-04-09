@@ -7,23 +7,31 @@
 
 import UIKit
 import RichieEditionsSDK
+import os
 
+let logging = os.Logger(subsystem: Bundle.main.bundleIdentifier!, category: "App")
+
+@MainActor
 public class AppCoordinator {
     private let window: UIWindow
     
     public init(window: UIWindow) {
         self.window = window
-        let editions = Editions(bundleId: "fi.richie.editionsTestApp",
-                                tokenProvider: TokenProviderImpl(),
-                                analyticsListener: AnalyticsListenerImpl())
-        
+        let richie = Richie(appIdentifier: "fi.richie.editionsTestApp")
+
         self.window.rootViewController = LaunchViewController(nibName: "LaunchViewController", bundle: nil)
 
         self.window.makeKeyAndVisible()
-        
-        editions.initialize { success in
-            if success {
+
+        Task {
+            do {
+                let editions = try await richie.makeEditions(
+                    analyticsListener: AnalyticsListenerImpl(),
+                    tokenProvider: TokenProviderImpl()
+                )
                 self.window.rootViewController = EditionsViewController(editions: editions)
+            } catch {
+                logging.error("Failed to initialize editions")
             }
         }
     }
