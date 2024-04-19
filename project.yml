@@ -48,4 +48,5 @@ targets:
 
 packages:
   RichieEditionsSDK:
-    path: "/tmp/richiesdk"
+    url: "https://github.com/richiefi/richiesdk-ios"
+    exactVersion: "202404.11.0"
