@@ -3,10 +3,10 @@ options:
   xcodeVersion: "1401"
   minimumXcodeGenVersion: "2.32.0"
   deploymentTarget:
-    iOS: "12.0"
+    iOS: "15.0"
 settingGroups:
   default:
-    SWIFT_VERSION: 5.5
+    SWIFT_VERSION: 5.10
     SWIFT_TREAT_WARNINGS_AS_ERRORS: true
 
 targets:
@@ -45,8 +45,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: "fi.richie.editions.app"
       groups:
         - default
-        
+
 packages:
   RichieEditionsSDK:
-    url: https://github.com/richiefi/richiesdk-ios
-    exactVersion: "202310.4"
+    url: "https://github.com/richiefi/richiesdk-ios"
+    exactVersion: "202404.11.0"
