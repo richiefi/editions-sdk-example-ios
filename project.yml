@@ -3,7 +3,7 @@ options:
   xcodeVersion: "1401"
   minimumXcodeGenVersion: "2.32.0"
   deploymentTarget:
-    iOS: "12.0"
+    iOS: "15.0"
 settingGroups:
   default:
     SWIFT_VERSION: 5.5
