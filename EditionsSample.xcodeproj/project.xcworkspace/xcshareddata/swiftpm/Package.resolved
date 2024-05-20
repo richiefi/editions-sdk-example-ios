@@ -1,14 +1,15 @@
 {
+  "originHash" : "0b0948d1905bba99ac2d1ef8361023352bfa5e6abeabbf478491197b2e99ffa0",
   "pins" : [
     {
       "identity" : "richiesdk-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/richiefi/richiesdk-ios",
       "state" : {
-        "revision" : "504eb91d16cf3f36cef20608176504f57b410b4b",
-        "version" : "202310.4.0"
+        "revision" : "269ecc965ae708544c4e17e7e6fb44483efb7cd1",
+        "version" : "202405.15.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
