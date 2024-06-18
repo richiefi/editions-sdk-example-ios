@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -130,13 +130,12 @@
 		C297C2F374777322F48FD58E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1401;
 				TargetAttributes = {
 				};
 			};
 			buildConfigurationList = 847792521947671E55F63B78 /* Build configuration list for PBXProject "EditionsSample" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -372,7 +371,7 @@
 			repositoryURL = "https://github.com/richiefi/richiesdk-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 202405.15;
+				version = 202406.25;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

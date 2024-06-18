@@ -49,4 +49,4 @@ targets:
 packages:
   RichieEditionsSDK:
     url: https://github.com/richiefi/richiesdk-ios
-    exactVersion: "202405.15"
+    exactVersion: "202406.25"
