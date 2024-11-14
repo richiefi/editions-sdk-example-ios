@@ -371,7 +371,7 @@
 			repositoryURL = "https://github.com/richiefi/richiesdk-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 202406.25;
+				version = 202411.25;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
