@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/richiefi/richiesdk-ios",
       "state" : {
-        "revision" : "93e4cd586fcf815ceafbd058ea1bf12c56d4f76b",
-        "version" : "202411.25.0"
+        "revision" : "a237a83aace39bb04444cac4e595cdbcc3b04380",
+        "version" : "202610.67.0"
       }
     }
   ],

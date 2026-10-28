@@ -22,7 +22,8 @@ public class AppCoordinator {
         
         self.window.makeKeyAndVisible()
         
-        let richie = Richie(appIdentifier: "fi.richie.editionsTestApp")
+        Richie.initializeShared(richieAppID: "fi.richie.editionsTestApp")
+        let richie = Richie.shared
         Task {
             do {
                 let editions = try await richie.makeEditions(

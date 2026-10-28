@@ -127,6 +127,8 @@ private extension EditionsViewController {
                     self.showToast(message: "Error opening edition: Edition not found.")
                 case .internalError(let err):
                     self.showToast(message: "Error opening edition: \(err.localizedDescription).")
+                case .presenterViewControllerNotInWindow:
+                    self.showToast(message: "Error opening edition: Presenter view controller not in window.")
                 @unknown default:
                     assertionFailure("Unknown error: \(error)")
                     Log.error("Unknown error: \(error)")
